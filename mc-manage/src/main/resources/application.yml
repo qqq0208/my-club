@@ -1,0 +1,60 @@
+server:
+  port: 23101 # 端口号
+spring:
+  application:
+    name: mc-manage # 项目名称
+  datasource:
+    url: jdbc:mysql://192.168.48.130:3306/myclub?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+  boot:
+    admin:
+      client:
+        instance:
+          service-base-url: http://localhost:23101 # 客户端地址
+        url: http://localhost:23102 # 服务端地址
+        username: admin # SpringBootAdmin账号
+        password: admin # SpringBootAdmin密码
+  servlet:
+    multipart:
+      max-file-size: -1 # 文件上传最大限制，-1表示无限制
+      max-request-size: 1GB # 每个文件大小限制
+  cache:
+    cache-names: room,school,assets,dept,emp,role,menu,assets_borrow,direction,club,club_progress,course,student # SpringCache缓存名称列表
+  data:
+    redis:
+      host: 192.168.48.130 # redis服务地址
+      port: 6379 # redis服务端口号
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 暴露所有端点
+  endpoint:
+    health:
+      show-details: always # 展示 health 端点的详细信息
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 下划线转驼峰
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台SQL
+  type-aliases-package: com.md.entity # 实体类别名包扫描
+  mapper-locations: classpath:mapper/*Mapper.xml
+pagehelper:
+  helper-dialect: mysql # 数据库方言
+  reasonable: true # page小于0或大于总页数的时候视为查询首页或尾页
+  page-size-zero: true #size为0时视为全查
+
+springdoc:
+  api-docs:
+    enabled: true # 启用SpringDoc
+  group-configs:
+    - group: v1 # v1分组
+      paths-to-match: /api/v1/** # 分组规则
+      packages-to-scan: com.md.controller # 控制器包扫描
+
+knife4j:
+  enable: true # 启用knife4j
+  setting:
+    language: zh_cn # 中文

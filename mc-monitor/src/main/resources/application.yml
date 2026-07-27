@@ -1,0 +1,9 @@
+server:
+  port: 23102 # 端口号
+spring:
+  application:
+    name: mc-monitor # 项目名称
+  security:
+    user:
+      name: admin # SpringBootAdmin账号
+      password: admin # SpringBootAdmin密码

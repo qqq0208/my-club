@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.md.mapper.RoomMapper">
+    <select id="list" resultType="com.md.entity.Room">
+        select * from rms_room
+        <where>
+            <if test="title!=null and title!=''">
+                title like concat('%',#{title},'%')
+                and
+            </if>
+                deleted=0
+        </where>
+    </select>
+
+    <!--删除多条-->
+    <update id="deleteBatch">
+        update rms_room set deleted=1,updated=current_timestamp where id in
+        <foreach collection="list" item="e" open="(" separator="," close=")">
+            #{e}
+        </foreach>
+    </update>
+
+    <!--单条修改-->
+    <update id="update" parameterType="com.md.entity.Room">
+        update  rms_room set
+        <if test="title!=null">title=#{title},</if>
+        <if test="address!=null">address=#{address},</if>
+        <if test="info!=null">info=#{info},</if>
+        <if test="capacity!=null">capacity=#{capacity},</if>
+        <if test="deleted!=null">deleted=#{deleted},</if>
+        <if test="created!=null">created=#{created},</if>
+        <if test="updated!=null">updated=#{updated},</if>
+        version=version+1
+        where id =#{id} and deleted=0 and version=#{version}
+    </update>
+</mapper>
